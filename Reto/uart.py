@@ -23,6 +23,6 @@ with open('sensor_data.csv', 'w', newline='') as file:
                 p_str = i + 3
             t = line[0:t_end]
             f = line[f_str:p_str-7]
-            p = line[p_str:len(line)-2]
+            p = line[p_str:len(line)-1]
         writer.writerow([t,f,p])
         print(line)
