@@ -1,0 +1,10 @@
+18:10:46 **** Incremental Build of configuration Debug for project stm32HelloWorldBlink ****
+make -j12 all 
+arm-none-eabi-size   stm32HelloWorldBlink.elf 
+   text	   data	    bss	    dec	    hex	filename
+   6496	     20	   1572	   8088	   1f98	stm32HelloWorldBlink.elf
+Finished building: default.size.stdout
+ 
+
+18:10:46 Build Finished. 0 errors, 0 warnings. (took 250ms)
+

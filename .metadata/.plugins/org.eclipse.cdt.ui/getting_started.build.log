@@ -1,0 +1,17 @@
+17:55:27 **** Build of configuration Debug for project getting_started ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "getting_started.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\getting_started\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="getting_started.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: getting_started.elf
+ 
+arm-none-eabi-size   getting_started.elf 
+arm-none-eabi-objdump -h -S  getting_started.elf  > "getting_started.list"
+   text	   data	    bss	    dec	    hex	filename
+  11420	     20	   1716	  13156	   3364	getting_started.elf
+Finished building: default.size.stdout
+ 
+Finished building: getting_started.list
+ 
+
+17:55:28 Build Finished. 0 errors, 0 warnings. (took 1s.320ms)
+

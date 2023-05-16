@@ -1,0 +1,718 @@
+21:41:57 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:262:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:262:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:262:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:262:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:262:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:262:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  262 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16056	    120	   1592	  17768	   4568	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:42:00 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16056	    120	   1592	  17768	   4568	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+21:49:24 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:90:9: warning: unused variable 'v' [-Wunused-variable]
+   90 |   float v;
+      |         ^
+../Core/Src/main.c:89:12: warning: unused variable 'dataADC' [-Wunused-variable]
+   89 |   uint16_t dataADC;
+      |            ^~~~~~~
+../Core/Src/main.c:88:8: warning: variable 'send' set but not used [-Wunused-but-set-variable]
+   88 |   bool send = false;
+      |        ^~~~
+../Core/Src/main.c:87:40: warning: unused variable 't' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                                        ^
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+../Core/Src/main.c:86:51: warning: unused variable 't_b' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                                   ^~~
+../Core/Src/main.c:86:44: warning: unused variable 't_a' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                            ^~~
+../Core/Src/main.c:86:39: warning: unused variable 'd' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                       ^
+../Core/Src/main.c:86:34: warning: unused variable 'c' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                  ^
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  10696	     20	   1572	  12288	   3000	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:49:55 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10696	     20	   1572	  12288	   3000	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+21:50:14 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16012	    120	   1592	  17724	   453c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:50:56 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:90:9: warning: unused variable 'v' [-Wunused-variable]
+   90 |   float v;
+      |         ^
+../Core/Src/main.c:89:12: warning: unused variable 'dataADC' [-Wunused-variable]
+   89 |   uint16_t dataADC;
+      |            ^~~~~~~
+../Core/Src/main.c:88:8: warning: variable 'send' set but not used [-Wunused-but-set-variable]
+   88 |   bool send = false;
+      |        ^~~~
+../Core/Src/main.c:87:40: warning: unused variable 't' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                                        ^
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+../Core/Src/main.c:86:51: warning: unused variable 't_b' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                                   ^~~
+../Core/Src/main.c:86:44: warning: unused variable 't_a' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                            ^~~
+../Core/Src/main.c:86:39: warning: unused variable 'd' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                       ^
+../Core/Src/main.c:86:34: warning: unused variable 'c' [-Wunused-variable]
+   86 |   uint32_t a=0, a1=0, a2=0, b=0, c=0, d=0, t_a=0, t_b=0;
+      |                                  ^
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  10696	     20	   1572	  12288	   3000	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:52:24 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16028	    120	   1592	  17740	   454c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:53:17 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16012	    120	   1592	  17724	   453c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+21:53:40 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16012	    120	   1592	  17724	   453c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+21:58:58 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16020	    120	   1592	  17732	   4544	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+22:00:23 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16020	    120	   1592	  17732	   4544	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+22:00:38 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16020	    120	   1592	  17732	   4544	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:00:52 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16020	    120	   1592	  17732	   4544	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:01:43 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16020	    120	   1592	  17732	   4544	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:03:23 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:259:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:259:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:259:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:259:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:259:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:259:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  259 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16028	    120	   1592	  17740	   454c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+22:07:36 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:261:15: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |              ~^                             ~~~
+      |               |                             |
+      |               int                           uint32_t {aka long unsigned int}
+      |              %ld
+../Core/Src/main.c:261:18: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                 ~^                               ~~~
+      |                  |                               |
+      |                  int                             uint32_t {aka long unsigned int}
+      |                 %ld
+../Core/Src/main.c:261:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                        ~^                            ~
+      |                         |                            |
+      |                         int                          uint32_t {aka long unsigned int}
+      |                        %ld
+../Core/Src/main.c:261:28: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                           ~^                           ~
+      |                            |                           |
+      |                            int                         uint32_t {aka long unsigned int}
+      |                           %ld
+../Core/Src/main.c:261:37: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                    ~^                    ~
+      |                                     |                    |
+      |                                     int                  uint32_t {aka long unsigned int}
+      |                                    %ld
+../Core/Src/main.c:261:40: warning: format '%d' expects argument of type 'int', but argument 7 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  261 |      printf("%d.%d) F: %d.%d || P: %d.%d\n",t_a, t_b,a,b,c,d);
+      |                                       ~^                   ~
+      |                                        |                   |
+      |                                        int                 uint32_t {aka long unsigned int}
+      |                                       %ld
+../Core/Src/main.c:92:46: warning: unused variable 'changed' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                                              ^~~~~~~
+../Core/Src/main.c:92:23: warning: unused variable 'row' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |                       ^~~
+../Core/Src/main.c:92:12: warning: unused variable 'count' [-Wunused-variable]
+   92 |   uint16_t count = 0, row = 1, tecla, found, changed = 0;
+      |            ^~~~~
+../Core/Src/main.c:87:26: warning: unused variable 'max_freq' [-Wunused-variable]
+   87 |   float pressed_t, freq, max_freq = 0, t=0;
+      |                          ^~~~~~~~
+arm-none-eabi-gcc -o "SensorsData_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\SensorsData_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SensorsData_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SensorsData_Reto.elf
+ 
+arm-none-eabi-size   SensorsData_Reto.elf 
+arm-none-eabi-objdump -h -S  SensorsData_Reto.elf  > "SensorsData_Reto.list"
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+Finished building: SensorsData_Reto.list
+ 
+22:07:48 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:08:13 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:08:20 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:08:27 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:08:33 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:09:26 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:09:34 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:09:59 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:12:26 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+22:15:55 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
