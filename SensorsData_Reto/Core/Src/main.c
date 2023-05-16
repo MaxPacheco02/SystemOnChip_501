@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file           : main.c
   * @author         : rahu7p
+  * @co-author      : MaxPacheco02
   ******************************************************************************
   * @board	  : nucleo-f103rb
   * @mcu	  : stm32f103rb
   *
   *
   *
-  * This code initialize the TIM2 in Capture mode (CH1) to determine how long was
-  * a button pressed. The duration of the event is stored in a variable.
+  * Used @rahu7p's template to solve the class' challenge
   *
   *
   ******************************************************************************
