@@ -9,6 +9,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="/Users/max/STM32CubeIDE/workspace_1.12.1/SystemOnChip_501"/>
 			<item value="C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2"/>
 		</list>
 	</section>

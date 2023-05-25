@@ -101,7 +101,7 @@ int main(void)
   while (1)
   {
 	  //USER_USART2_Transmit( msg, sizeof( msg ) );
-	  //printf(msg);
+	  printf(msg);
 	  if(USER_USART2_Receive() == 't'){
 		  GPIOA->ODR ^= GPIO_ODR_ODR5;
 		  uint8_t msg2[] = "toggle led";

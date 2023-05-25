@@ -1,3 +1,8 @@
+connections/org.eclipse.remote.serial.core.connectionType/prueba/serial.baudRate=6
+connections/org.eclipse.remote.serial.core.connectionType/prueba/serial.byteSize=3
+connections/org.eclipse.remote.serial.core.connectionType/prueba/serial.parity=0
+connections/org.eclipse.remote.serial.core.connectionType/prueba/serial.portName=/dev/cu.usbmodem14103
+connections/org.eclipse.remote.serial.core.connectionType/prueba/serial.stopBits=0
 connections/org.eclipse.remote.serial.core.connectionType/stm_115200_COM3/serial.baudRate=11
 connections/org.eclipse.remote.serial.core.connectionType/stm_115200_COM3/serial.byteSize=3
 connections/org.eclipse.remote.serial.core.connectionType/stm_115200_COM3/serial.parity=0

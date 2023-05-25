@@ -1,0 +1,12 @@
+main.c:74:5:main	1
+main.c:134:6:SystemClock_Config	3
+main.c:173:13:MX_GPIO_Init	1
+main.c:189:6:USER_RCC_Init	1
+main.c:197:6:USER_GPIO_Init	1
+main.c:209:6:USER_ADC_Init	1
+main.c:219:6:USER_ADC_Calibration	2
+main.c:223:10:USER_ADC_Read	2
+main.c:228:6:USER_USART2_Init	1
+main.c:244:6:USER_USART2_Transmit	3
+main.c:251:10:USER_USART2_Receive	2
+main.c:261:6:Error_Handler	1

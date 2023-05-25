@@ -60,8 +60,8 @@ all: main-build
 main-build: LAB3_UART.elf secondary-outputs
 
 # Tool invocations
-LAB3_UART.elf LAB3_UART.map: $(OBJS) $(USER_OBJS) C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\LAB3_UART\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "LAB3_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.11.2\LAB3_UART\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LAB3_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+LAB3_UART.elf LAB3_UART.map: $(OBJS) $(USER_OBJS) /Users/max/STM32CubeIDE/workspace_1.12.1/SystemOnChip_501/LAB3_UART/STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "LAB3_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/Users/max/STM32CubeIDE/workspace_1.12.1/SystemOnChip_501/LAB3_UART/STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LAB3_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
