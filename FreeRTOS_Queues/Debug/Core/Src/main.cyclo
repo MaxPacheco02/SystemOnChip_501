@@ -1,0 +1,13 @@
+main.c:80:5:main	1
+main.c:152:6:SystemClock_Config	3
+main.c:191:13:MX_GPIO_Init	1
+main.c:205:6:USER_RCC_Init	1
+main.c:210:6:USER_GPIO_Init	1
+main.c:249:6:USER_USART2_Init	1
+main.c:263:6:USER_USART2_Transmit	3
+main.c:270:10:USER_USART2_Receive	2
+main.c:275:6:SenderTask	13
+main.c:321:6:ReceiverTask	2
+main.c:338:6:StartDefaultTask	1
+main.c:357:6:HAL_TIM_PeriodElapsedCallback	2
+main.c:372:6:Error_Handler	1
