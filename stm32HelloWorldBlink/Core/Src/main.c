@@ -91,10 +91,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
   USER_RCC_Init();
   USER_GPIO_Init();
-  LCD_Init( );//				inicializamos la libreria del LCD
-  LCD_Cursor_ON( );//			cursor visible activo
-  LCD_Clear( );//			borra la pantalla
-  LCD_Set_Cursor( 1, 0 );//		posiciona cursor en la fila 1 columna 0
+  //LCD_Init( );//				inicializamos la libreria del LCD
+  //LCD_Cursor_ON( );//			cursor visible activo
+  //LCD_Clear( );//			borra la pantalla
+  //LCD_Set_Cursor( 1, 0 );//		posiciona cursor en la fila 1 columna 0
   //LCD_Put_Str( "ABCDEFGHIJKLMNOd" );//	escribe un string
   //LCD_Set_Cursor(2,0);
   //LCD_Put_Str( "ABC" );//	escribe un string
@@ -114,12 +114,32 @@ int main(void)
   while (1)
   {
 //A
-/*
-	  GPIOA->BSRR = GPIO_BSRR_BS5;//	LD2 ON
+		GPIOA->BSRR = GPIO_BSRR_BR13;
+		GPIOA->BSRR = GPIO_BSRR_BR1;
+		GPIOA->BSRR = GPIO_BSRR_BR15;
+
+		HAL_Delay(1000);//			1 second delay
+
+		GPIOA->BSRR = GPIO_BSRR_BS13;
+		GPIOA->BSRR = GPIO_BSRR_BS1;
+		GPIOA->BSRR = GPIO_BSRR_BR15;
+
+		HAL_Delay(1000);//			1 second delay
+
+		GPIOA->BSRR = GPIO_BSRR_BR13;
+		GPIOA->BSRR = GPIO_BSRR_BR1;
+		GPIOA->BSRR = GPIO_BSRR_BS15;
+
+		HAL_Delay(1000);//			1 second delay
+
+
+		/*
+	  GPIOA->BSRR = GPIO_BSRR_BS15;//	LD2 ON
 	  HAL_Delay(1000);//			1 second delay
-	  GPIOA->BSRR = GPIO_BSRR_BR5;//	LD2 OFF
+	  GPIOA->BSRR = GPIO_BSRR_BR15;//	LD2 OFF
 	  HAL_Delay(1000);//			1 second delay
-*/
+	  */
+
 
 //B
 /*
@@ -138,6 +158,7 @@ int main(void)
 */
 
 //C
+	  /*
 	  GPIOB->BSRR = (1 << 16) | (1 << 1) | (1 << 2) | (1 << 3);
 	  found = 0;
 	  if(!(GPIOB->IDR & GPIO_IDR_IDR4 ) & !found){
@@ -252,6 +273,7 @@ int main(void)
 	  }
 
 	  HAL_Delay(50);
+	  */
 
 
     /* USER CODE END WHILE */
@@ -326,13 +348,13 @@ void USER_RCC_Init(void){
 
 void USER_GPIO_Init(void){
 //A, B
-	/*
+
 	//LED
 	GPIOA->BSRR = GPIO_BSRR_BR5;//			PA5 -> 0, LD2 OFF
 	//pin A5 as output push-pull max speed 10MHz
 	GPIOA->CRL &= ~GPIO_CRL_CNF5 & ~GPIO_CRL_MODE5_1;
 	GPIOA->CRL |= GPIO_CRL_MODE5_0;
-	*/
+
 
 	/*
 	//Bouncing and debounced
@@ -350,6 +372,19 @@ void USER_GPIO_Init(void){
 	*/
 
 //C
+
+	//pin PA13 (Relay Valve Out) as output push-pull
+	GPIOA->CRH &= ~GPIO_CRH_CNF13 & ~GPIO_CRH_MODE13_1;
+	GPIOA->CRH |= GPIO_CRH_MODE13_0;
+
+	//pin PA1 (Relay Valve Out) as output push-pull
+	GPIOA->CRL &= ~GPIO_CRL_CNF1 & ~GPIO_CRL_MODE1_1;
+	GPIOA->CRL |= GPIO_CRL_MODE1_0;
+
+	//pin PA15 (Relay Valve Out) as output push-pull
+	GPIOA->CRH &= ~GPIO_CRH_CNF15 & ~GPIO_CRH_MODE15_1;
+	GPIOA->CRH |= GPIO_CRH_MODE15_0;
+
 	GPIOB->BSRR &= GPIO_BSRR_BR0 & GPIO_BSRR_BR1 & GPIO_BSRR_BR2 & GPIO_BSRR_BR3;
 	//pins PB0-PB3 as output push-pull
 	GPIOB->CRL &= ~GPIO_CRL_CNF0 & ~GPIO_CRL_MODE0_1;

@@ -1,0 +1,10 @@
+15:33:20 **** Incremental Build of configuration Debug for project VTec S 4 ****
+make -j20 all 
+arm-none-eabi-size   VTec\ S\ 4.elf 
+   text	   data	    bss	    dec	    hex	filename
+   7236	    120	   1592	   8948	   22f4	VTec S 4.elf
+Finished building: default.size.stdout
+ 
+
+15:33:21 Build Finished. 0 errors, 0 warnings. (took 232ms)
+
