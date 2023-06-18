@@ -1,0 +1,44 @@
+23:26:18 **** Incremental Build of configuration Debug for project LAB4_FreeRTOS ****
+make -j3 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'Task1':
+../Core/Src/main.c:268:25: warning: pointer targets in passing argument 1 of 'USER_USART2_Transmit' differ in signedness [-Wpointer-sign]
+  268 |    USER_USART2_Transmit("T1", 2);
+      |                         ^~~~
+      |                         |
+      |                         char *
+../Core/Src/main.c:252:36: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+  252 | void USER_USART2_Transmit(uint8_t *pData, uint16_t size ){
+      |                           ~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'Task2':
+../Core/Src/main.c:278:25: warning: pointer targets in passing argument 1 of 'USER_USART2_Transmit' differ in signedness [-Wpointer-sign]
+  278 |    USER_USART2_Transmit("T2", 2);
+      |                         ^~~~
+      |                         |
+      |                         char *
+../Core/Src/main.c:252:36: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+  252 | void USER_USART2_Transmit(uint8_t *pData, uint16_t size ){
+      |                           ~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'Task3':
+../Core/Src/main.c:288:25: warning: pointer targets in passing argument 1 of 'USER_USART2_Transmit' differ in signedness [-Wpointer-sign]
+  288 |    USER_USART2_Transmit("T3", 2);
+      |                         ^~~~
+      |                         |
+      |                         char *
+../Core/Src/main.c:252:36: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+  252 | void USER_USART2_Transmit(uint8_t *pData, uint16_t size ){
+      |                           ~~~~~~~~~^~~~~
+arm-none-eabi-gcc -o "LAB4_FreeRTOS.elf" @"objects.list"   -mcpu=cortex-m3 -T"/Users/max/STM32CubeIDE/workspace_1.12.1/SystemOnChip_501/LAB4_FreeRTOS/STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LAB4_FreeRTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: LAB4_FreeRTOS.elf
+ 
+arm-none-eabi-size   LAB4_FreeRTOS.elf 
+arm-none-eabi-objdump -h -S  LAB4_FreeRTOS.elf  > "LAB4_FreeRTOS.list"
+   text	   data	    bss	    dec	    hex	filename
+  14320	    124	   5772	  20216	   4ef8	LAB4_FreeRTOS.elf
+Finished building: default.size.stdout
+ 
+Finished building: LAB4_FreeRTOS.list
+ 
+
+23:26:19 Build Finished. 0 errors, 3 warnings. (took 1s.122ms)
+

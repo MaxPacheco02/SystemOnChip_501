@@ -1,0 +1,10 @@
+22:15:55 **** Incremental Build of configuration Debug for project SensorsData_Reto ****
+make -j12 all 
+arm-none-eabi-size   SensorsData_Reto.elf 
+   text	   data	    bss	    dec	    hex	filename
+  16044	    120	   1592	  17756	   455c	SensorsData_Reto.elf
+Finished building: default.size.stdout
+ 
+
+22:15:56 Build Finished. 0 errors, 0 warnings. (took 300ms)
+
