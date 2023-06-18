@@ -1,0 +1,925 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @author         : MaxPacheco02
+  ******************************************************************************
+  * @board	: nucleo-f103rb
+  * @mcu	: stm32f103rb
+  * @api      	: CMSIS-RTOSv1
+  *
+  *
+  * Code for a system and valve testing project developed for RobertShaw
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+#include "lcd.h"
+#include "cmsis_os.h"
+#include "myprintf.h"
+#include <stdbool.h>
+
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+uint16_t count = 0, row = 1, changed = 0;
+uint16_t key_change_template[] = {0,1,2,3};
+uint16_t key_change[] = {0,1,2,3};
+uint16_t keys[] = {0x1, 0x2, 0x3, 0xA, 0x4, 0x5, 0x6, 0xB, 0x7, 0x8, 0x9, 0xC, 0xE, 0x0, 0xF, 0xD};
+uint32_t t1=0, t2=0, t3=3, t4=0, f1=0, f2=0, f3=0, v1=0, v2=0, r1=0, r2=0, r3=0;
+uint32_t vars[5] = {30, 0, 0, 0, 1}; //time [ds], valve_status, flow_freq, flow_pressure, comms
+
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+osThreadId taskHandle0;
+osThreadId taskHandle1;
+osThreadId taskHandle2;
+osThreadId taskHandle3;
+osThreadId taskHandle4;
+osThreadId taskHandle5;
+osThreadId taskHandle6;
+osMutexId mutexHandle;
+osTimerId timHandle1;
+osTimerId timHandle2;
+osMessageQId keyboardQueueHandle;
+//osMessageQId lcdQueueHandle;
+osMessageQId vQueueHandle;
+osMessageQId valveQueueHandle;
+osMessageQId fQueueHandle;
+
+bool lcd_mod = false, commds_mod = false, comms = false;
+bool v_mod = false, v_state = false, v_in = false, v_out = false, virgin = true;
+bool ks = false, sense = false;
+uint8_t choice;
+uint16_t dataADC;
+uint32_t rem_time = 30, last_rem_time = 30;
+float freq = 0 , v = 0;
+
+char msg1[] = "   BIENVENIDO   ";
+char msg2[] = "PRESIONE TECLADO";
+char msg3[] = "VOFF 00:30      ";
+char msg4[] = "0.0V 00.0HZ     ";
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+
+/* USER CODE BEGIN PFP */
+void Task0(void const * argument);
+void Task1(void const * argument);
+void Task2(void const * argument);
+void Task3(void const * argument);
+void Task4(void const * argument);
+void Task5(void const * argument);
+void Task6(void const * argument);
+void Timer_Callback1(void const * argument);
+void Timer_Callback2(void const * argument);
+
+void USER_RCC_Init(void);
+void USER_GPIO_Init(void);
+
+//void USER_TIM2_Capture_Init(void);
+//uint16_t USER_TIM2_Capture_Event(void);
+void USER_TIM3_Capture_Init(void);
+uint16_t USER_TIM3_Capture_Event(void);
+
+void USER_USART2_Init(void);
+void USER_USART2_Transmit(uint8_t *pData, uint16_t size);
+uint32_t USER_USART2_Receive(void);
+
+void USER_USART3_Init(void);
+void USER_USART3_Transmit(uint8_t *pData, uint16_t size);
+uint32_t USER_USART3_Receive(void);
+
+void USER_ADC_Init(void);
+void USER_ADC_Calibration(void);
+uint16_t USER_ADC_Read( void );
+
+void USER_EXTI_Init(void);
+void EXTI9_5_IRQHandler(void);
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  /* USER CODE BEGIN 2 */
+  USER_RCC_Init();
+  USER_GPIO_Init();
+  //USER_TIM2_Capture_Init();
+  USER_TIM3_Capture_Init();
+  //USER_USART2_Init();
+  USER_USART2_Init();
+  USER_ADC_Init();
+  USER_ADC_Calibration();
+
+  LCD_Init( );//				inicializamos la libreria del LCD
+  LCD_Clear( );//			borra la pantalla
+  LCD_Set_Cursor( 1, 0 );//		posiciona cursor en la fila 1 columna 0
+  LCD_Put_Str(msg1);
+  LCD_Set_Cursor(2,0);
+  LCD_Put_Str(msg2);
+
+  USER_EXTI_Init();
+
+  /* USER CODE END 2 */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  osMutexDef(mutex);
+  mutexHandle = osMutexCreate(osMutex(mutex));
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  osTimerDef(tim1, Timer_Callback1);
+  timHandle1 = osTimerCreate(osTimer(tim1), osTimerOnce, NULL);
+  osTimerDef(tim2, Timer_Callback2);
+  timHandle2 = osTimerCreate(osTimer(tim2), osTimerOnce, NULL);
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  osMessageQDef(keyboardQueue, 1, uint32_t);
+  keyboardQueueHandle = osMessageCreate(osMessageQ(keyboardQueue), NULL);
+  osMessageQDef(vQueue, 1, uint32_t);
+  vQueueHandle = osMessageCreate(osMessageQ(vQueue), NULL);
+  osMessageQDef(valveQueue, 1, uint32_t);
+  valveQueueHandle = osMessageCreate(osMessageQ(valveQueue), NULL);
+  osMessageQDef(fQueue, 1, uint32_t);
+  fQueueHandle = osMessageCreate(osMessageQ(fQueue), NULL);
+  //osMessageQDef(lcdQueue, 1, char[32]);
+  //lcdQueueHandle = osMessageCreate(osMessageQ(lcdQueue), NULL);
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  osThreadDef(task0, Task0, osPriorityNormal, 0, 128); //Read from keyboard
+  taskHandle0 = osThreadCreate(osThread(task0), NULL);
+  osThreadDef(task1, Task1, osPriorityNormal, 0, 128); //Read from keyboard
+  taskHandle1 = osThreadCreate(osThread(task1), NULL);
+  osThreadDef(task2, Task2, osPriorityNormal, 0, 128); //Send Data
+  taskHandle2 = osThreadCreate(osThread(task2), NULL);
+  osThreadDef(task3, Task3, osPriorityNormal, 0, 128); //Update LCD
+  taskHandle3 = osThreadCreate(osThread(task3), NULL);
+  osThreadDef(task4, Task4, osPriorityNormal, 0, 128);
+  taskHandle4 = osThreadCreate(osThread(task4), NULL);
+  osThreadDef(task5, Task5, osPriorityNormal, 0, 128);
+  taskHandle5 = osThreadCreate(osThread(task5), NULL);
+  osThreadDef(task6, Task6, osPriorityNormal, 0, 128);
+  taskHandle6 = osThreadCreate(osThread(task6), NULL);
+  /* USER CODE END RTOS_THREADS */
+
+  /* Start scheduler */
+  //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\nStarting...%ld\r\n", xPortGetFreeHeapSize());
+  ADC1->CR2	|=	 ADC_CR2_ADON;//	starts the conversion
+  osKernelStart();
+  /* We should never get here as control is now taken by the scheduler */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+
+uint32_t read_keyboard(){
+	uint32_t tecla, found;
+	found = 0;
+	for(int i = 0 ; i < 4 ; i++){
+		for(int j = 0 ; j < 4 ; j++){
+			key_change[j] = key_change_template[j];
+		}
+		key_change[i]+=16;
+
+		GPIOB->BSRR = (1 << key_change[0]) | (1 << key_change[1]) | (1 << key_change[2]) | (1 << key_change[3]);
+		if(!(GPIOB->IDR & GPIO_IDR_IDR4 ) & !found){
+		 tecla = keys[4*i];
+		 found = 1;
+		}
+		if(!(GPIOB->IDR & GPIO_IDR_IDR5 ) & !found){
+		  tecla = keys[1+4*i];
+		  found = 1;
+		}
+		if(!(GPIOB->IDR & GPIO_IDR_IDR6 ) & !found){
+		  tecla = keys[2+4*i];
+		  found = 1;
+		}
+		if(!(GPIOB->IDR & GPIO_IDR_IDR7 ) & !found){
+		  tecla = keys[3+4*i];
+		  found = 1;
+		}
+	}
+
+	if(found){
+		virgin = false;
+		return tecla;
+	} else
+		return -1;
+}
+void Task0(void const * argument){
+	uint32_t counter = 0, temp, tec, v, f;
+	osEvent key_event, v_event, f_event, ks_event;
+	for(;;)
+	{
+		//osMutexWait(mutexHandle, osWaitForever);
+		//if(vars[4] == 1){
+		printf("Time: %d, Valve State: %d,Flow: %d,Pressure: %d,KillSwitch: %d\r\n", vars[0], vars[1], vars[2], vars[3], ks);
+		//}
+		//osMutexRelease(mutexHandle);
+
+		if(ks){
+			vars[1] = 0;
+		}
+
+		key_event = osMessageGet(keyboardQueueHandle, 0);
+
+		if(key_event.status == osEventMessage){
+			tec = key_event.value.v;
+
+			if(tec > 0 && tec < 6){
+				switch(tec){
+				case 1:
+					if(!ks){
+						if(vars[1] > 0)
+							vars[1] = 0;
+						else
+							vars[1] = 1;
+					}
+					break;
+				case 2:
+					vars[0]+=50;
+					break;
+				case 3:
+					if(vars[4] == 0)
+						vars[4] = 1;
+					else
+						vars[4] = 0;
+					break;
+				case 4:
+					if(!ks){
+						if(vars[1] > 0)
+							vars[1] = 0;
+						else
+							vars[1] = 2;
+					}
+					break;
+				case 5:
+					if(vars[0] >= 50)
+						vars[0]-=50;
+					else if (vars[0] > 0)
+						vars[0] = 0;
+					break;
+				}
+			}
+		}
+
+		if(vars[1]==1 || vars[1] == 2){
+			if(vars[0] >= 1)
+				Timer_Callback1(100);
+			else{
+				if(vars[1] == 1){
+					vars[1] = 0;
+					vars[0] = 120;
+				} else if(vars[1] == 2){
+					vars[1] = 0;
+					vars[0] = 30;
+				} else {
+					vars[0]++;
+					if(sense){
+						vars[1] = 1;
+					} else {
+						vars[1] = 2;
+					}
+				}
+			}
+		}
+
+		v_event = osMessageGet(vQueueHandle, 100);
+		if(v_event.status == osEventMessage){
+			v = v_event.value.v;
+			vars[3] = v;
+		}
+
+		if(osMessagePut(valveQueueHandle, vars[1], 0) != osOK ){
+			osMutexWait(mutexHandle, osWaitForever);
+			//printf("Error T0 (valve)\r\n");
+			osMutexRelease(mutexHandle);
+		}
+
+		f_event = osMessageGet(fQueueHandle, 100);
+		if(f_event.status == osEventMessage){
+			f = f_event.value.v;
+			vars[2] = f;
+		}
+
+		/*ks_event = osMessageGet(fQueueHandle, 100);
+		if(ks_event.status == osEventMessage){
+			//ks = ks_event.value.v;
+			vars[1] = 0;
+		}*/
+
+		temp = osKernelSysTick() - (100 * counter++);
+		osDelay(100 - temp);
+	}
+}
+
+void Task1(void const * argument){
+	uint32_t counter = 0;
+	uint32_t temp, tecla;
+	osStatus ret;
+	for(;;)
+	{
+		tecla = read_keyboard();
+		ret = osMessagePut(keyboardQueueHandle, tecla, 0);
+		if(ret != osOK ){
+			osMutexWait(mutexHandle, osWaitForever);
+			//printf("Error T1 (keyboard): %d\r\n", ret);
+			osMutexRelease(mutexHandle);
+		}
+
+		temp = osKernelSysTick() - (200 * counter++);
+		osDelay(200 - temp);
+	}
+}
+
+void Task2(void const * argument){
+	uint32_t temp;
+	uint32_t counter = 0;
+	float time;
+	//char msg3[] = "VOFF 00:30  COMM";
+	//char msg4[] = "0.0V 00.0HZ  OFF";
+	for(;;)
+	{
+		if(virgin){
+			LCD_Set_Cursor(1,0);
+			LCD_Put_Str(msg1);
+			LCD_Set_Cursor(2,0);
+			LCD_Put_Str(msg2);
+		} else {
+			//osMutexWait(mutexHandle, osWaitForever);//pc10,11,12,pump,in,out
+			//osMutexRelease(mutexHandle);
+
+			if(!ks){
+				if(vars[1] == 0){
+					msg3[1] = 'O';
+					msg3[2] = 'F';
+					msg3[3] = 'F';
+				} else if(vars[1] == 1){
+					msg3[1] = 'I';
+					msg3[2] = 'N';
+					msg3[3] = ' ';
+				} else {
+					msg3[1] = 'O';
+					msg3[2] = 'U';
+					msg3[3] = 'T';
+				}
+				msg4[14] = ' ';
+				msg4[15] = ' ';
+			} else {
+				msg3[1] = 'O';
+				msg3[2] = 'F';
+				msg3[3] = 'F';
+
+				msg4[14] = 'K';
+				msg4[15] = 'S';
+			}
+
+			time = vars[0]/10;
+			t1 = ((uint16_t)time/60)/10;
+			t2 = ((uint16_t)time/60)%10;
+			t3 = ((uint16_t)time%60)/10;
+			t4 = ((uint16_t)time%60)%10;
+			msg3[5] = t1+'0';
+			msg3[6] = t2+'0';
+			msg3[8] = t3+'0';
+			msg3[9] = t4+'0';
+
+			if(vars[4]){
+				msg3[12] = 'C';
+				msg3[13] = 'O';
+				msg3[14] = 'M';
+				msg3[15] = 'M';
+			} else {
+				msg3[12] = ' ';
+				msg3[13] = ' ';
+				msg3[14] = ' ';
+				msg3[15] = ' ';
+			}
+
+			f1 = ((uint8_t)vars[2])/10;
+			f2 = ((uint8_t)vars[2])%10;
+			f3 = ((uint8_t)(vars[2]*10))%10;
+			msg4[5] = f1+'0';
+			msg4[6] = f2+'0';
+			msg4[8] = f3+'0';
+
+			v1 = ((uint16_t)vars[3]/10)%10;
+			v2 = (uint16_t)(vars[3])%10;
+			msg4[0] = v1+'0';
+			msg4[2] = v2+'0';
+
+			LCD_Set_Cursor(1,0);
+			LCD_Put_Str(msg3);
+			LCD_Set_Cursor(2,0);
+			LCD_Put_Str(msg4);
+		}
+
+		temp = osKernelSysTick() - (250 * counter++);
+		osDelay(250 - temp);
+	}
+}
+
+void Task3(void const * argument){
+	for(;;)
+	{
+		osSignalWait(1, osWaitForever);
+		osMutexWait(mutexHandle, osWaitForever);
+		//printf("KILLSWITCH PRESSED!\r\n");
+		GPIOA->BSRR = (1 << 1) | (1 << 9) | (1 << 15);
+		ks = !ks;
+		osMutexRelease(mutexHandle);
+
+		/*if(osMessagePut(ksQueueHandle, 1, 0) != osOK ){
+			osMutexWait(mutexHandle, osWaitForever);
+			printf("Error T3 (ks)\r\n");
+			osMutexRelease(mutexHandle);
+		}*/
+
+
+		//GPIOA->BSRR = (1 << 13) | (1 << 14) | (1 << 15);
+
+		//printf("T:%d%d.%d%d/V:%d.%d/F:%d%d.%d/R1:%d/R2:%d/R3:%d\r\n",t1,t2,t3,t4,v1,v2,f1,f2,f3,r1,r2,r3);
+		/*temp = osKernelSysTick() - (1000 * counter++);
+		osDelay(1000 - temp);*/
+	}
+}
+
+void Task4(void const * argument){
+	uint32_t temp;
+	uint32_t counter = 0;
+	uint16_t dataADC;
+	osStatus ret;
+	float v;
+	for(;;)
+	{
+		dataADC = USER_ADC_Read();
+		v = (float)(dataADC*33/4095);
+		ret = osMessagePut(vQueueHandle, v, 0);
+		if(ret != osOK ){
+			osMutexWait(mutexHandle, osWaitForever);
+			//printf("Error T4 (pressure voltage): %d\r\n", ret);
+			osMutexRelease(mutexHandle);
+		}
+
+		//printf("Sending %d.%d\r\n", (uint8_t)v%10, (uint8_t)(v*10)%10);
+		temp = osKernelSysTick() - (100 * counter++);
+		osDelay(100 - temp);
+	}
+}
+
+void Task5(void const * argument){
+	uint32_t temp, counter = 0, v_state;
+	osEvent valve_event;
+	for(;;)
+	{
+		valve_event = osMessageGet(valveQueueHandle, osWaitForever);
+		if(valve_event.status == osEventMessage){
+			v_state = valve_event.value.v;
+			switch(v_state){
+			case 1:
+				GPIOA->BSRR = (1 << 17) | (1 << 25) | (1 << 15);
+				break;
+			case 2:
+				GPIOA->BSRR = (1 << 17) | (1 << 9) | (1 << 31);
+				break;
+			default:
+				GPIOA->BSRR = (1 << 1) | (1 << 9) | (1 << 15);
+				break;
+			}
+		}
+		osMutexWait(mutexHandle, osWaitForever);
+		//osTimerStart(timHandle2, 1000);
+		osMutexRelease(mutexHandle);
+		temp = osKernelSysTick() - (100 * counter++);
+		osDelay(100 - temp);
+	}
+}
+
+void Task6(void const * argument){
+	uint32_t temp, counter = 0;
+	uint16_t event_val1, event_val2, event_diff;
+	float pressed_t, flow;
+	float freq;
+	osStatus ret;
+	for(;;)
+	{
+		if((TIM3->SR & TIM_SR_CC1IF)){
+			event_val1 = USER_TIM3_Capture_Event();//	capture the 1st event
+			TIM2->CCER ^=	TIM_CCER_CC1P;//		capture is done on different edge
+			event_val2 = USER_TIM3_Capture_Event();//	capture the 2nd event
+			TIM2->CCER ^=	TIM_CCER_CC1P;//		capture is done on different edge
+			event_diff = event_val2 - event_val1;//		2nd event - 1st event
+
+			pressed_t = ( 1.0 / 64000000.0 ) * event_diff * (TIM3->PSC + 1);
+			freq = (1/(pressed_t));
+			flow = 0.1212*freq + 0.061;
+			osMutexWait(mutexHandle, osWaitForever);
+			//printf("Freq: %d\r\n", (uint16_t)freq);
+			osMutexRelease(mutexHandle);
+		}
+		ret = osMessagePut(fQueueHandle, (uint32_t)flow, 0);
+		if(ret != osOK ){
+		  osMutexWait(mutexHandle, osWaitForever);
+		  //printf("Error T6 (flow frequency): %d\r\n", ret);
+		  osMutexRelease(mutexHandle);
+		}
+		temp = osKernelSysTick() - (100 * counter++);
+		osDelay(100 - temp);
+	}
+}
+
+void USER_RCC_Init(void){
+	//I/O port A clock enable
+	RCC->APB2ENR	|=	 RCC_APB2ENR_IOPAEN
+					|	 RCC_APB2ENR_IOPCEN
+  					|	 RCC_APB2ENR_ADC1EN//	ADC 1 clock enable
+					|	 RCC_APB2ENR_AFIOEN;//          AFIO clock enable
+
+
+	RCC->CFGR	|=	 RCC_CFGR_ADCPRE;//	ADC prescaler 1:8 for 8 MHz
+
+
+	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM2EN//Timer 2 clock enable
+					|	 RCC_APB1ENR_TIM3EN//Timer 3 clock enable
+					|	 RCC_APB1ENR_USART2EN;//  	USART2 clock enable
+
+}
+
+void EXTI9_5_IRQHandler(void){
+	if( EXTI->PR & EXTI_PR_PR8 ){
+		osSignalSet(taskHandle3, 1);
+		EXTI->PR	|=	EXTI_PR_PR8;//		External Interrupt Flag cleared
+	}
+}
+
+void USER_GPIO_Init(void){
+
+	//PA0 (TIM2_CH1) as input floating
+	GPIOA->CRL	&=	~GPIO_CRL_CNF0_1 & ~GPIO_CRL_MODE0; //Transmit timer
+	GPIOA->CRL	|=	 GPIO_CRL_CNF0_0;
+
+	//PA8 (button) as input pull-up
+	GPIOA->CRH &= ~GPIO_CRH_CNF8_0 & ~GPIO_CRH_MODE8;
+	GPIOA->CRH |= GPIO_CRH_CNF8_1;
+
+	//pin PA2 (USART2_TX) as alternate function output push-pull, max speed 10MHz
+	GPIOA->CRL	&=	~GPIO_CRL_CNF2_0 & ~GPIO_CRL_MODE2_1;
+	GPIOA->CRL	|=	 GPIO_CRL_CNF2_1 | GPIO_CRL_MODE2_0;
+
+	//pin PA3 (USART2_RX) as input pull-up
+	GPIOA->CRL	&=	~GPIO_CRL_CNF3_0 & ~GPIO_CRL_MODE3;
+	GPIOA->CRL	|=	 GPIO_CRL_CNF3_1;
+
+	//PA4 (ADC12_IN4) as analog
+	GPIOA->CRL	&=	~GPIO_CRL_CNF4 & ~GPIO_CRL_MODE4; //Pressure Sensor
+
+	//PA6 (TIM3_CH1) as input floating
+	GPIOA->CRL	&=	~GPIO_CRL_CNF6_1 & ~GPIO_CRL_MODE6; //Flow Sensor
+	GPIOA->CRL	|=	 GPIO_CRL_CNF6_0;
+
+	//TECLADO MATRICIAL
+	GPIOB->BSRR &= GPIO_BSRR_BR0 & GPIO_BSRR_BR1 & GPIO_BSRR_BR2 & GPIO_BSRR_BR3;
+	//pins PB0-PB3 as output push-pull
+	GPIOB->CRL &= ~GPIO_CRL_CNF0 & ~GPIO_CRL_MODE0_1;
+	GPIOB->CRL |= GPIO_CRL_MODE0_0;
+	GPIOB->CRL &= ~GPIO_CRL_CNF1 & ~GPIO_CRL_MODE1_1;
+	GPIOB->CRL |= GPIO_CRL_MODE1_0;
+	GPIOB->CRL &= ~GPIO_CRL_CNF2 & ~GPIO_CRL_MODE2_1;
+	GPIOB->CRL |= GPIO_CRL_MODE2_0;
+	GPIOB->CRL &= ~GPIO_CRL_CNF3 & ~GPIO_CRL_MODE3_1;
+	GPIOB->CRL |= GPIO_CRL_MODE3_0;
+
+	//pins PB4-PB7 as input pull-up
+	GPIOB->CRL &= ~GPIO_CRL_CNF4_0 & ~GPIO_CRL_MODE4;
+	GPIOB->CRL |= GPIO_CRL_CNF4_1;
+	GPIOB->ODR |= GPIO_ODR_ODR4;
+	GPIOB->CRL &= ~GPIO_CRL_CNF5_0 & ~GPIO_CRL_MODE5;
+	GPIOB->CRL |= GPIO_CRL_CNF5_1;
+	GPIOB->ODR |= GPIO_ODR_ODR5;
+	GPIOB->CRL &= ~GPIO_CRL_CNF6_0 & ~GPIO_CRL_MODE6;
+	GPIOB->CRL |= GPIO_CRL_CNF6_1;
+	GPIOB->ODR |= GPIO_ODR_ODR6;
+	GPIOB->CRL &= ~GPIO_CRL_CNF7_0 & ~GPIO_CRL_MODE7;
+	GPIOB->CRL |= GPIO_CRL_CNF7_1;
+	GPIOB->ODR |= GPIO_ODR_ODR7;
+
+	//pin PB10 (USART3_TX) as alternate function output push-pull, max speed 10MHz
+	GPIOB->CRH	&=	~GPIO_CRH_CNF10_0 & ~GPIO_CRH_MODE10_1;
+	GPIOB->CRH	|=	 GPIO_CRH_CNF10_1 | GPIO_CRH_MODE10_0; //UART TX
+
+	//pin PB11 (USART3_RX) as input pull-up
+	GPIOB->CRH	&=	~GPIO_CRH_CNF11_0 & ~GPIO_CRH_MODE11; //UART RX
+	GPIOB->CRH	|=	 GPIO_CRH_CNF11_1;
+
+	//pin PA1 (Relay Pump) as output push-pull
+	GPIOA->CRL &= ~GPIO_CRL_CNF1 & ~GPIO_CRL_MODE1_1;
+	GPIOA->CRL |= GPIO_CRL_MODE1_0;
+
+	//pin PA9 (Relay Valve In) as output push-pull
+	GPIOA->CRH &= ~GPIO_CRH_CNF9 & ~GPIO_CRH_MODE9_1;
+	GPIOA->CRH |= GPIO_CRH_MODE9_0;
+
+	//pin PA15 (Relay Valve Out) as output push-pull
+	GPIOA->CRH &= ~GPIO_CRH_CNF15 & ~GPIO_CRH_MODE15_1;
+	GPIOA->CRH |= GPIO_CRH_MODE15_0;
+}
+
+void USER_EXTI_Init(void){
+	AFIO->EXTICR[3]	&=	~AFIO_EXTICR3_EXTI8;
+	EXTI->PR	|=	 EXTI_PR_PR8;
+	EXTI->IMR	|=	 EXTI_IMR_MR8;
+	EXTI->FTSR	|=	 EXTI_FTSR_TR8;
+	NVIC_SetPriority(EXTI9_5_IRQn, 5);//    		The priority must be above level 5
+	NVIC_EnableIRQ(EXTI9_5_IRQn);
+}
+
+void USER_ADC_Init(void){
+	ADC1->CR1	&=	~ADC_CR1_DUALMOD;//	independent mode
+	ADC1->CR2	&=	~ADC_CR2_ALIGN;//	right alignment for the result
+	ADC1->CR2	|=	 ADC_CR2_CONT;//	continuous conversion mode
+	ADC1->SMPR2	&=	~ADC_SMPR2_SMP0;//	1.5 cycles channel sample time
+	ADC1->SQR1	&=	~ADC_SQR1_L;//		1 conversion on regular channels
+	ADC1->SQR3 	&=	~ADC_SQR3_SQ1;//	first and only conversion in Ch0
+	ADC1->SQR3	|=	ADC_SQR3_SQ1_2;
+	ADC1->CR2	|=	 ADC_CR2_ADON;//	ADC enabled
+	HAL_Delay(1);//					tstab(1us) after ADC enabled, real 1ms
+}
+void USER_ADC_Calibration(void){
+	ADC1->CR2	|=	 ADC_CR2_CAL;//		start calibration
+	while( ADC1->CR2 & ADC_CR2_CAL );//		wait until calibration is done
+}
+uint16_t USER_ADC_Read( void ){
+	while( !( ADC1->SR & ADC_SR_EOC ) );//		wait until conversion is done
+	return (uint16_t)ADC1->DR;//			return ADC data
+}
+
+void USER_TIM2_Capture_Init(void){
+	TIM2->CR1	&=	~TIM_CR1_CKD_0;
+	TIM2->CR1	|=	 TIM_CR1_CKD_1;//	sampling (DTS) = TIM_CLK/4
+	TIM2->CCMR1 	&=	~TIM_CCMR1_CC1S_1;
+	TIM2->CCMR1 	|=	 TIM_CCMR1_CC1S_0;//	CC1 channel as input, mapped on TI1
+	TIM2->CCMR1 	|=	 TIM_CCMR1_IC1F;//	filter -> DTS/32, N=8
+	TIM2->CCER	|=	 TIM_CCER_CC1P;//	capture is done on falling edge
+	TIM2->CCMR1 	&=	~TIM_CCMR1_IC1PSC;//	no prescaler
+	TIM2->CCER	|=	 TIM_CCER_CC1E;//	capture enabled
+	TIM2->PSC	 =	 97;//		maximum prescaler
+	TIM2->SMCR	&=	!TIM_SMCR_SMS;
+	TIM2->CR1	&=	!TIM_CR1_CMS & !TIM_CR1_DIR & !TIM_CR1_UDIS;
+	TIM2->SR	&=	!TIM_SR_UIF;
+	TIM2->CR1	|=	 TIM_CR1_CEN;//		counter enabled
+}
+uint16_t USER_TIM2_Capture_Event(void){
+	while( !(TIM2->SR & TIM_SR_CC1IF) );//		wait until a capture occurs
+	return TIM2->CCR1;//				return the captured value
+}
+
+void USER_TIM3_Capture_Init(void){
+	TIM3->CR1	&=	~TIM_CR1_CKD_0;
+	TIM3->CR1	|=	 TIM_CR1_CKD_1;//	sampling (DTS) = TIM_CLK/4
+	TIM3->CCMR1 	&=	~TIM_CCMR1_CC1S_1;
+	TIM3->CCMR1 	|=	 TIM_CCMR1_CC1S_0;//	CC1 channel as input, mapped on TI1
+	TIM3->CCMR1 	|=	 TIM_CCMR1_IC1F;//	filter -> DTS/32, N=8
+	TIM3->CCER	|=	 TIM_CCER_CC1P;//	capture is done on falling edge
+	TIM3->CCMR1 	&=	~TIM_CCMR1_IC1PSC;//	no prescaler
+	TIM3->CCER	|=	 TIM_CCER_CC1E;//	capture enabled
+	TIM3->PSC	 =	 97;//		maximum prescaler
+
+	TIM3->CR1	|=	 TIM_CR1_CEN;//		counter enabled
+}
+
+uint16_t USER_TIM3_Capture_Event(void){
+	while( !(TIM3->SR & TIM_SR_CC1IF) );//		wait until a capture occurs
+	return TIM3->CCR1;//				return the captured value
+}
+
+void USER_USART2_Init(void){
+	USART2->CR1	|=	 USART_CR1_UE;//		USART enabled
+	USART2->CR1	&=	~USART_CR1_M//		  	1 start bit, 8 data bits
+			&	~USART_CR1_PCE;//		parity control disabled
+	USART2->CR2	&=	~USART_CR2_STOP;//  		1 stop bit
+	USART2->BRR	 =	 0xD05;//			9600 bps -> 208.33,
+	//USARTDIV = 32*10^6/(16*9600)
+	//NEW USARTDIV = 32*10^6/(16*115200)=17.361
+	//BRR = [17->HEX=11][.361*16->HEX=6]=116
+	//`->BRR = 0x116;
+
+	USART2->CR1	|=	 USART_CR1_TE;//		        transmitter enabled
+	USART2->CR1	|=	 USART_CR1_RE;//		        receiver enabled
+}
+
+void USER_USART2_Transmit(uint8_t *pData, uint16_t size ){
+	for( int i = 0; i < size; i++ ){
+		while( ( USART2->SR & USART_SR_TXE ) == 0 ){}//	wait until transmit reg is empty
+		USART2->DR = *pData++;//			transmit data
+	}
+}
+
+uint32_t USER_USART2_Receive(void){
+	while((USART2->SR & USART_SR_RXNE) == 0){}
+	return USART2->DR;
+}
+
+void USER_USART3_Init(void){
+	USART3->CR1	|=	 USART_CR1_UE;//		USART enabled
+	USART3->CR1	&=	~USART_CR1_M//		  	1 start bit, 8 data bits
+			&	~USART_CR1_PCE;//		parity control disabled
+	USART3->CR2	&=	~USART_CR2_STOP;//  		1 stop bit
+	USART3->BRR	 =	 0x116;//			9600 bps -> 208.33,
+	//USARTDIV = 32*10^6/(16*9600) d05?
+	//NEW USARTDIV = 32*10^6/(16*115200)=17.361
+	//BRR = [17->HEX=11][.361*16->HEX=6]=116
+	//`->BRR = 0x116;
+
+	USART3->CR1	|=	 USART_CR1_TE;//		        transmitter enabled
+	USART3->CR1	|=	 USART_CR1_RE;//		        receiver enabled
+}
+
+void USER_USART3_Transmit(uint8_t *pData, uint16_t size ){
+	for( int i = 0; i < size; i++ ){
+		while( ( USART3->SR & USART_SR_TXE ) == 0 ){}//	wait until transmit reg is empty
+		USART3->DR = *pData++;//			transmit data
+	}
+}
+
+uint32_t USER_USART3_Receive(void){
+	while((USART3->SR & USART_SR_RXNE) == 0){}
+	return USART3->DR;
+}
+
+void Timer_Callback1(void const * argument){
+	vars[0]-=1;
+
+	//printf("T4\r\n");
+}
+
+void Timer_Callback2(void const * argument){
+	printf("T5\r\n");
+}
+/* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM4 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM4) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+  /* USER CODE END Callback 1 */
+}
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

@@ -1,4 +1,4 @@
-Core/Src/myprintf.o: ../Core/Src/myprintf.c ../Core/Src/myprintf.h \
+Core/Src/myprintf.o: ../Core/Src/myprintf.c ../Core/Inc/myprintf.h \
  ../Core/Inc/main.h ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -21,7 +21,7 @@ Core/Src/myprintf.o: ../Core/Src/myprintf.c ../Core/Src/myprintf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
-../Core/Src/myprintf.h:
+../Core/Inc/myprintf.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 ../Core/Inc/stm32f1xx_hal_conf.h:

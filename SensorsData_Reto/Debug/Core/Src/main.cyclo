@@ -1,0 +1,16 @@
+main.c:82:5:main	29
+main.c:317:6:SystemClock_Config	3
+main.c:356:13:MX_GPIO_Init	1
+main.c:368:6:USER_RCC_Init	1
+main.c:381:6:USER_GPIO_Init	1
+main.c:438:6:USER_TIM2_Capture_Init	1
+main.c:453:10:USER_TIM2_Capture_Event	2
+main.c:458:6:USER_TIM3_Capture_Init	1
+main.c:472:10:USER_TIM3_Capture_Event	2
+main.c:477:6:USER_USART3_Init	1
+main.c:492:6:USER_USART3_Transmit	3
+main.c:499:10:USER_USART3_Receive	2
+main.c:504:6:USER_ADC_Init	1
+main.c:515:6:USER_ADC_Calibration	2
+main.c:519:10:USER_ADC_Read	2
+main.c:531:6:Error_Handler	1

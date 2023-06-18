@@ -1,67 +1,10 @@
-10:13:14 **** Incremental Build of configuration Debug for project FreeRTOS_Reto ****
+23:37:00 **** Incremental Build of configuration Debug for project FreeRTOS_Reto ****
 make -j20 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:219:66: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-  219 |   printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\nStarting...%ld\r\n", xPortGetFreeHeapSize());
-      |                                                                ~~^       ~~~~~~~~~~~~~~~~~~~~~~
-      |                                                                  |       |
-      |                                                                  |       size_t {aka unsigned int}
-      |                                                                  long int
-      |                                                                %d
-../Core/Src/main.c: In function 'Task0':
-../Core/Src/main.c:371:21: warning: passing argument 1 of 'Timer_Callback1' makes pointer from integer without a cast [-Wint-conversion]
-  371 |     Timer_Callback1(100);
-      |                     ^~~
-      |                     |
-      |                     int
-../Core/Src/main.c:97:35: note: expected 'const void *' but argument is of type 'int'
-   97 | void Timer_Callback1(void const * argument);
-      |                      ~~~~~~~~~~~~~^~~~~~~~
-../Core/Src/main.c:378:12: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-  378 |   printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-      |           ~^                       ~~~~~~~
-      |            |                           |
-      |            int                         uint32_t {aka long unsigned int}
-      |           %ld
-../Core/Src/main.c:378:16: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-  378 |   printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-      |               ~^                            ~~~~~~~
-      |                |                                |
-      |                int                              uint32_t {aka long unsigned int}
-      |               %ld
-../Core/Src/main.c:378:20: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-  378 |   printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-      |                   ~^                                 ~~~~~~~
-      |                    |                                     |
-      |                    int                                   uint32_t {aka long unsigned int}
-      |                   %ld
-../Core/Src/main.c:378:24: warning: format '%d' expects argument of type 'int', but argument 5 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-  378 |   printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-      |                       ~^                                      ~~~~~~~
-      |                        |                                          |
-      |                        int                                        uint32_t {aka long unsigned int}
-      |                       %ld
-../Core/Src/main.c:378:28: warning: format '%d' expects argument of type 'int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-  378 |   printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-      |                           ~^                                           ~~~~~~~
-      |                            |                                               |
-      |                            int                                             uint32_t {aka long unsigned int}
-      |                           %ld
-../Core/Src/main.c:330:39: warning: unused variable 'ks_event' [-Wunused-variable]
-  330 |  osEvent key_event, v_event, f_event, ks_event;
-      |                                       ^~~~~~~~
-arm-none-eabi-gcc -o "FreeRTOS_Reto.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\maxpr\STM32CubeIDE\workspace_1.12.1\SystemOnChip_501\FreeRTOS_Reto\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FreeRTOS_Reto.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: FreeRTOS_Reto.elf
- 
 arm-none-eabi-size   FreeRTOS_Reto.elf 
-arm-none-eabi-objdump -h -S  FreeRTOS_Reto.elf  > "FreeRTOS_Reto.list"
    text	   data	    bss	    dec	    hex	filename
-  33836	    280	  10440	  44556	   ae0c	FreeRTOS_Reto.elf
+  34148	    280	  10448	  44876	   af4c	FreeRTOS_Reto.elf
 Finished building: default.size.stdout
  
-Finished building: FreeRTOS_Reto.list
- 
 
-10:13:15 Build Finished. 0 errors, 8 warnings. (took 1s.234ms)
+23:37:00 Build Finished. 0 errors, 0 warnings. (took 293ms)
 

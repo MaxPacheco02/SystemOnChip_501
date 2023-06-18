@@ -21,6 +21,7 @@
 #include "myprintf.h"
 #include <stdbool.h>
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -36,8 +37,9 @@ uint16_t count = 0, row = 1, changed = 0;
 uint16_t key_change_template[] = {0,1,2,3};
 uint16_t key_change[] = {0,1,2,3};
 uint16_t keys[] = {0x1, 0x2, 0x3, 0xA, 0x4, 0x5, 0x6, 0xB, 0x7, 0x8, 0x9, 0xC, 0xE, 0x0, 0xF, 0xD};
-uint32_t t1=0, t2=0, t3=3, t4=0, f1=0, f2=0, f3=0, v1=0, v2=0, r1=0, r2=0, r3=0;
-uint32_t vars[5] = {30, 0, 0, 0, 0}; //time [ds], valve_status, flow_freq, flow_pressure, comms
+uint32_t t1=0, t2=0, t3=3, t4=0, f1=0, f2=0, f3=0, v1=0, v2=0, r1=0, r2=0, r3=0, diff=0;
+float time0, time1;
+uint32_t vars[5] = {30, 0, 0, 0, 1}; //time [ds], valve_status, flow_freq, flow_pressure, comms
 
 
 /* USER CODE END PD */
@@ -65,11 +67,9 @@ osMessageQId vQueueHandle;
 osMessageQId valveQueueHandle;
 osMessageQId fQueueHandle;
 
-hx711_t loadcell;/*Weight sensor variables*/
-
-
 bool lcd_mod = false, commds_mod = false, comms = false;
-bool v_mod = false, v_state = false, ks = false, v_in = false, v_out = false, virgin = true;
+bool v_mod = false, v_state = false, v_in = false, v_out = false, virgin = true;
+bool ks = false, sense = false, virgin2 = true;
 uint8_t choice;
 uint16_t dataADC;
 uint32_t rem_time = 30, last_rem_time = 30;
@@ -77,8 +77,8 @@ float freq = 0 , v = 0;
 
 char msg1[] = "   BIENVENIDO   ";
 char msg2[] = "PRESIONE TECLADO";
-char msg3[] = "VOFF 00:30  COMM";
-char msg4[] = "0.0V 00.0HZ  OFF";
+char msg3[] = "VOFF 00:30      ";
+char msg4[] = "0.0V 00.0HZ     ";
 
 /* USER CODE END PV */
 
@@ -108,6 +108,10 @@ uint16_t USER_TIM3_Capture_Event(void);
 void USER_USART2_Init(void);
 void USER_USART2_Transmit(uint8_t *pData, uint16_t size);
 uint32_t USER_USART2_Receive(void);
+
+void USER_USART3_Init(void);
+void USER_USART3_Transmit(uint8_t *pData, uint16_t size);
+uint32_t USER_USART3_Receive(void);
 
 void USER_ADC_Init(void);
 void USER_ADC_Calibration(void);
@@ -152,6 +156,7 @@ int main(void)
   USER_GPIO_Init();
   //USER_TIM2_Capture_Init();
   USER_TIM3_Capture_Init();
+  //USER_USART2_Init();
   USER_USART2_Init();
   USER_ADC_Init();
   USER_ADC_Calibration();
@@ -216,7 +221,7 @@ int main(void)
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
-  printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\nStarting...%ld\r\n", xPortGetFreeHeapSize());
+  //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\nStarting...%ld\r\n", xPortGetFreeHeapSize());
   ADC1->CR2	|=	 ADC_CR2_ADON;//	starts the conversion
   osKernelStart();
   /* We should never get here as control is now taken by the scheduler */
@@ -320,16 +325,26 @@ uint32_t read_keyboard(){
 	}
 
 	if(found){
-		virgin = false;
 		return tecla;
 	} else
 		return -1;
 }
 void Task0(void const * argument){
-	uint32_t counter = 0, temp, tec, v, f;
+	uint32_t counter = 0, temp, tec, v, f, diff;
 	osEvent key_event, v_event, f_event, ks_event;
 	for(;;)
 	{
+		time0 = osKernelSysTick();
+		if(vars[4] == 1){
+			osMutexWait(mutexHandle, osWaitForever);
+			//printf("Time: %d, Valve State: %d, Flow: %d, Pressure: %d, KillSwitch: %d\r\n", vars[0], vars[1], vars[2], vars[3], ks);
+			osMutexRelease(mutexHandle);
+		}
+
+		if(ks){
+			vars[1] = 0;
+		}
+
 		key_event = osMessageGet(keyboardQueueHandle, 0);
 
 		if(key_event.status == osEventMessage){
@@ -338,13 +353,15 @@ void Task0(void const * argument){
 			if(tec > 0 && tec < 6){
 				switch(tec){
 				case 1:
-					if(vars[1] == 1)
-						vars[1] = 0;
-					else if(vars[1] == 0)
-						vars[1] = 1;
+					if(!ks){
+						if(vars[1] > 0)
+							vars[1] = 0;
+						else
+							vars[1] = 1;
+					}
 					break;
 				case 2:
-					vars[0]+=20;
+					vars[0]+=50;
 					break;
 				case 3:
 					if(vars[4] == 0)
@@ -353,30 +370,50 @@ void Task0(void const * argument){
 						vars[4] = 0;
 					break;
 				case 4:
-					if(vars[1] < 2)
-						vars[1] = 2;
-					else
-						vars[1] = 0;
+					if(!ks){
+						if(vars[1] > 0)
+							vars[1] = 0;
+						else
+							vars[1] = 2;
+					}
 					break;
 				case 5:
-					if(vars[0] >= 2)
-						vars[0]-=2;
+					if(vars[0] >= 50)
+						vars[0]-=50;
+					else if (vars[0] > 0)
+						vars[0] = 0;
 					break;
 				}
 			}
 		}
 
-		if(vars[1]){
-			if(vars[0] >= 1)
-				Timer_Callback1(100);
-			else
-				vars[1] = 0;
+		if(!ks){
+			if(vars[1]==1 || vars[1] == 2){
+				virgin2 = false;
+				if(vars[0] >= 1)
+					Timer_Callback1(100);
+				else{
+					if(vars[1] == 1){
+						vars[1] = 0;
+						sense = !sense;
+					} else if(vars[1] == 2){
+						vars[1] = 0;
+						sense = !sense;
+					}
+				}
+			} else {
+				if(!virgin2){
+					vars[0]++;
+					if(!sense){
+						vars[1] = 1;
+						vars[0] = 30;
+					} else {
+						vars[1] = 2;
+						vars[0] = 90;
+					}
+				}
+			}
 		}
-
-
-		osMutexWait(mutexHandle, osWaitForever);
-		printf("%d, %d, %d, %d, %d\r\n", vars[0], vars[1], vars[2], vars[3], vars[4]);
-		osMutexRelease(mutexHandle);
 
 		v_event = osMessageGet(vQueueHandle, 100);
 		if(v_event.status == osEventMessage){
@@ -386,7 +423,7 @@ void Task0(void const * argument){
 
 		if(osMessagePut(valveQueueHandle, vars[1], 0) != osOK ){
 			osMutexWait(mutexHandle, osWaitForever);
-			printf("Error T0 (valve)\r\n");
+			//printf("Error T0 (valve)\r\n");
 			osMutexRelease(mutexHandle);
 		}
 
@@ -396,17 +433,15 @@ void Task0(void const * argument){
 			vars[2] = f;
 		}
 
-		if(ks){
-			vars[1] = 0;
-			ks = false;
-		}
-
 		/*ks_event = osMessageGet(fQueueHandle, 100);
 		if(ks_event.status == osEventMessage){
 			//ks = ks_event.value.v;
 			vars[1] = 0;
 		}*/
 
+		time1 = osKernelSysTick();
+		diff = (uint32_t)((time1-time0)*1000000);
+		printf("%d\r\n", diff);
 		temp = osKernelSysTick() - (100 * counter++);
 		osDelay(100 - temp);
 	}
@@ -449,17 +484,28 @@ void Task2(void const * argument){
 			//osMutexRelease(mutexHandle);
 
 			if(!ks){
-				if(vars[1] == 1){
+				if(vars[1] == 0){
+					msg3[1] = 'O';
+					msg3[2] = 'F';
+					msg3[3] = 'F';
+				} else if(vars[1] == 1){
+					msg3[1] = 'I';
 					msg3[2] = 'N';
 					msg3[3] = ' ';
 				} else {
-					msg3[2] = 'F';
-					msg3[3] = 'F';
+					msg3[1] = 'O';
+					msg3[2] = 'U';
+					msg3[3] = 'T';
 				}
+				msg4[14] = ' ';
+				msg4[15] = ' ';
 			} else {
-				ks = false;
+				msg3[1] = 'O';
 				msg3[2] = 'F';
 				msg3[3] = 'F';
+
+				msg4[14] = 'K';
+				msg4[15] = 'S';
 			}
 
 			time = vars[0]/10;
@@ -473,11 +519,15 @@ void Task2(void const * argument){
 			msg3[9] = t4+'0';
 
 			if(vars[4]){
-				msg4[14] = 'N';
-				msg4[15] = ' ';
+				msg3[12] = 'C';
+				msg3[13] = 'O';
+				msg3[14] = 'M';
+				msg3[15] = 'M';
 			} else {
-				msg4[14] = 'F';
-				msg4[15] = 'F';
+				msg3[12] = ' ';
+				msg3[13] = ' ';
+				msg3[14] = ' ';
+				msg3[15] = ' ';
 			}
 
 			f1 = ((uint8_t)vars[2])/10;
@@ -498,8 +548,8 @@ void Task2(void const * argument){
 			LCD_Put_Str(msg4);
 		}
 
-		temp = osKernelSysTick() - (500 * counter++);
-		osDelay(500 - temp);
+		temp = osKernelSysTick() - (250 * counter++);
+		osDelay(250 - temp);
 	}
 }
 
@@ -508,10 +558,9 @@ void Task3(void const * argument){
 	{
 		osSignalWait(1, osWaitForever);
 		osMutexWait(mutexHandle, osWaitForever);
-		printf("KILLSWITCH PRESSED!\r\n");
-		GPIOA->BSRR = (1 << 17) | (1 << 25) | (1 << 31);
-		ks = true
-				;
+		//printf("KILLSWITCH PRESSED!\r\n");
+		GPIOA->BSRR = (1 << 1) | (1 << 9) | (1 << 15);
+		ks = !ks;
 		osMutexRelease(mutexHandle);
 
 		/*if(osMessagePut(ksQueueHandle, 1, 0) != osOK ){
@@ -562,10 +611,10 @@ void Task5(void const * argument){
 			v_state = valve_event.value.v;
 			switch(v_state){
 			case 1:
-				GPIOA->BSRR = (1 << 1) | (1 << 9) | (1 << 31);
+				GPIOA->BSRR = (1 << 17) | (1 << 25) | (1 << 15);
 				break;
 			case 2:
-				GPIOA->BSRR = (1 << 17) | (1 << 25) | (1 << 15);
+				GPIOA->BSRR = (1 << 1) | (1 << 9) | (1 << 31);
 				break;
 			default:
 				GPIOA->BSRR = (1 << 17) | (1 << 25) | (1 << 31);
@@ -583,8 +632,8 @@ void Task5(void const * argument){
 void Task6(void const * argument){
 	uint32_t temp, counter = 0;
 	uint16_t event_val1, event_val2, event_diff;
-	float pressed_t;
-	uint32_t freq;
+	float pressed_t, flow;
+	float freq;
 	osStatus ret;
 	for(;;)
 	{
@@ -597,11 +646,12 @@ void Task6(void const * argument){
 
 			pressed_t = ( 1.0 / 64000000.0 ) * event_diff * (TIM3->PSC + 1);
 			freq = (1/(pressed_t));
+			flow = 0.1212*freq + 0.061;
 			osMutexWait(mutexHandle, osWaitForever);
 			//printf("Freq: %d\r\n", (uint16_t)freq);
 			osMutexRelease(mutexHandle);
 		}
-		ret = osMessagePut(fQueueHandle, freq, 0);
+		ret = osMessagePut(fQueueHandle, (uint32_t)flow, 0);
 		if(ret != osOK ){
 		  osMutexWait(mutexHandle, osWaitForever);
 		  //printf("Error T6 (flow frequency): %d\r\n", ret);
@@ -803,8 +853,36 @@ uint32_t USER_USART2_Receive(void){
 	return USART2->DR;
 }
 
+void USER_USART3_Init(void){
+	USART3->CR1	|=	 USART_CR1_UE;//		USART enabled
+	USART3->CR1	&=	~USART_CR1_M//		  	1 start bit, 8 data bits
+			&	~USART_CR1_PCE;//		parity control disabled
+	USART3->CR2	&=	~USART_CR2_STOP;//  		1 stop bit
+	USART3->BRR	 =	 0x116;//			9600 bps -> 208.33,
+	//USARTDIV = 32*10^6/(16*9600) d05?
+	//NEW USARTDIV = 32*10^6/(16*115200)=17.361
+	//BRR = [17->HEX=11][.361*16->HEX=6]=116
+	//`->BRR = 0x116;
+
+	USART3->CR1	|=	 USART_CR1_TE;//		        transmitter enabled
+	USART3->CR1	|=	 USART_CR1_RE;//		        receiver enabled
+}
+
+void USER_USART3_Transmit(uint8_t *pData, uint16_t size ){
+	for( int i = 0; i < size; i++ ){
+		while( ( USART3->SR & USART_SR_TXE ) == 0 ){}//	wait until transmit reg is empty
+		USART3->DR = *pData++;//			transmit data
+	}
+}
+
+uint32_t USER_USART3_Receive(void){
+	while((USART3->SR & USART_SR_RXNE) == 0){}
+	return USART3->DR;
+}
+
 void Timer_Callback1(void const * argument){
 	vars[0]-=1;
+
 	//printf("T4\r\n");
 }
 
